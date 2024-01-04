@@ -1,4 +1,4 @@
-# nucleitemplate
+# nuclei ssrf template
 Nuclei Template: SSRF Variations
 
 Description:
